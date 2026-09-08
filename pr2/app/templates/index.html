@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Локальна детекція обʼєктів — YOLOv8</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --danger: #ef4444;
+      --success: #10b981;
+      --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 56rem;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: 0.75rem;
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (min-width: 640px) {
+      .controls-grid {
+        grid-template-columns: 2fr 1fr;
+        align-items: end;
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--text);
+    }
+
+    input[type="file"] {
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+      background: var(--bg);
+      cursor: pointer;
+    }
+
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    input[type="range"] {
+      flex: 1;
+      accent-color: var(--primary);
+    }
+
+    .slider-value {
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      min-width: 3rem;
+      text-align: right;
+    }
+
+    .btn-submit {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      width: 100%;
+    }
+
+    .btn-submit:hover:not(:disabled) {
+      background: var(--primary-hover);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-item {
+      background: var(--bg);
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .stat-title {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-val {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .canvas-wrapper {
+      position: relative;
+      background: #000;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    canvas {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      margin-top: 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 0.625rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background: var(--bg);
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    tr:hover td {
+      background: #f1f5f9;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: white;
+    }
+
+    .alert {
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+      font-size: 0.9375rem;
+    }
+
+    .alert-error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #f87171;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    details {
+      margin-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+    }
+
+    summary {
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+      font-size: 0.8125rem;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Детекція обʼєктів</h1>
+      <p>Локальний inference моделі Ultralytics YOLOv8 на FastAPI</p>
+    </header>
+
+    <div class="card">
+      <form id="detect-form">
+        <div class="controls-grid">
+          <div class="form-group">
+            <label for="image">Оберіть зображення для аналізу</label>
+            <input id="image" type="file" name="image" accept="image/*" required>
+          </div>
+
+          <div class="form-group">
+            <label for="confidence">Поріг упевненості (Confidence):</label>
+            <div class="slider-container">
+              <input id="confidence" type="range" name="confidence" min="0.05" max="0.95" step="0.05" value="0.25">
+              <span id="conf-display" class="slider-value">0.25</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.25rem;">
+          <button type="submit" id="submit-btn" class="btn-submit">Виконати детекцію</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="error-box" class="alert alert-error hidden"></div>
+
+    <div id="result-card" class="card hidden">
+      <div class="stats-bar">
+        <div class="stat-item">
+          <div class="stat-title">Знайдено об'єктів</div>
+          <div id="stat-count" class="stat-val">0</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-title">Час inference</div>
+          <div id="stat-time" class="stat-val">0 мс</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-title">Роздільність</div>
+          <div id="stat-size" class="stat-val">0 &times; 0</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-title">Поріг</div>
+          <div id="stat-threshold" class="stat-val">0.25</div>
+        </div>
+      </div>
+
+      <div class="canvas-wrapper">
+        <canvas id="display-canvas"></canvas>
+      </div>
+
+      <div class="table-wrapper">
+        <h3>Знайдені об'єкти</h3>
+        <table id="objects-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Клас</th>
+              <th>Впевненість</th>
+              <th>Координати [x1, y1, x2, y2]</th>
+            </tr>
+          </thead>
+          <tbody id="objects-tbody"></tbody>
+        </table>
+      </div>
+
+      <details>
+        <summary>Переглянути сирий JSON</summary>
+        <pre><code id="json-code"></code></pre>
+      </details>
+    </div>
+  </div>
+
+  <script>
+    // Сторінка звертається до власного ендпоінта застосунку.
+    // Як показувати знайдені обʼєкти — списком, таблицею, рамками поверх
+    // зображення — на ваш розсуд.
+    const form = document.getElementById('detect-form');
+    const imageInput = document.getElementById('image');
+    const confSlider = document.getElementById('confidence');
+    const confDisplay = document.getElementById('conf-display');
+    const submitBtn = document.getElementById('submit-btn');
+    const errorBox = document.getElementById('error-box');
+    const resultCard = document.getElementById('result-card');
+    const canvas = document.getElementById('display-canvas');
+    const ctx = canvas.getContext('2d');
+
+    const statCount = document.getElementById('stat-count');
+    const statTime = document.getElementById('stat-time');
+    const statSize = document.getElementById('stat-size');
+    const statThreshold = document.getElementById('stat-threshold');
+    const objectsTbody = document.getElementById('objects-tbody');
+    const jsonCode = document.getElementById('json-code');
+
+    confSlider.addEventListener('input', (e) => {
+      confDisplay.textContent = parseFloat(e.target.value).toFixed(2);
+    });
+
+    const classColors = {};
+    function getColorForClass(className) {
+      if (!classColors[className]) {
+        let hash = 0;
+        for (let i = 0; i < className.length; i++) {
+          hash = className.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        const hue = Math.abs(hash % 360);
+        classColors[className] = `hsl(${hue}, 75%, 45%)`;
+      }
+      return classColors[className];
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      errorBox.classList.add('hidden');
+      errorBox.textContent = '';
+
+      const file = imageInput.files[0];
+      if (!file) {
+        showError('Будь ласка, оберіть файл зображення.');
+        return;
+      }
+
+      const confVal = confSlider.value;
+      const formData = new FormData();
+      formData.append('image', file);
+      formData.append('confidence', confVal);
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Обробка моделі…';
+
+      try {
+        const response = await fetch('/api/detect', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          const detailMsg = data.detail || 'Невідома помилка під час обробки.';
+          showError(`Помилка (${response.status}): ${detailMsg}`);
+          return;
+        }
+
+        renderResults(file, data);
+      } catch (err) {
+        showError('Не вдалося звернутися до сервера або сталася мережева помилка.');
+        console.error(err);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Виконати детекцію';
+      }
+    });
+
+    function showError(msg) {
+      errorBox.textContent = msg;
+      errorBox.classList.remove('hidden');
+    }
+
+    function renderResults(file, data) {
+      resultCard.classList.remove('hidden');
+
+      statCount.textContent = data.count;
+      statTime.textContent = `${data.inference_time_ms} мс`;
+      statSize.textContent = `${data.image_size.width} × ${data.image_size.height}`;
+      statThreshold.textContent = data.confidence_threshold;
+
+      jsonCode.textContent = JSON.stringify(data, null, 2);
+
+      objectsTbody.innerHTML = '';
+      if (data.objects.length === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td colspan="4" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">Жодного об'єкта не знайдено з порогом впевненості &ge; ${data.confidence_threshold}.</td>`;
+        objectsTbody.appendChild(row);
+      } else {
+        data.objects.forEach((obj, idx) => {
+          const color = getColorForClass(obj.class_name);
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${idx + 1}</td>
+            <td><span class="badge" style="background:${color};">${obj.class_name}</span></td>
+            <td><strong>${(obj.confidence * 100).toFixed(1)}%</strong></td>
+            <td><code>[${obj.box.x1}, ${obj.box.y1}, ${obj.box.x2}, ${obj.box.y2}]</code></td>
+          `;
+          objectsTbody.appendChild(row);
+        });
+      }
+
+      const img = new Image();
+      img.onload = () => {
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+
+        ctx.drawImage(img, 0, 0);
+
+        data.objects.forEach((obj) => {
+          const color = getColorForClass(obj.class_name);
+          const { x1, y1, x2, y2 } = obj.box;
+          const w = x2 - x1;
+          const h = y2 - y1;
+
+          ctx.strokeStyle = color;
+          ctx.lineWidth = Math.max(2, Math.round(canvas.width / 350));
+          ctx.strokeRect(x1, y1, w, h);
+
+          const labelText = `${obj.class_name} ${(obj.confidence * 100).toFixed(0)}%`;
+          const fontSize = Math.max(14, Math.round(canvas.width / 45));
+          ctx.font = `bold ${fontSize}px sans-serif`;
+
+          const textMetrics = ctx.measureText(labelText);
+          const textPadding = 4;
+          const bgHeight = fontSize + textPadding * 2;
+          const bgWidth = textMetrics.width + textPadding * 2;
+
+          let bgY = y1 - bgHeight;
+          if (bgY < 0) bgY = y1;
+
+          ctx.fillStyle = color;
+          ctx.fillRect(x1, bgY, bgWidth, bgHeight);
+
+          ctx.fillStyle = '#ffffff';
+          ctx.textBaseline = 'top';
+          ctx.fillText(labelText, x1 + textPadding, bgY + textPadding);
+        });
+      };
+      img.src = URL.createObjectURL(file);
+    }
+  </script>
+</body>
+</html>
