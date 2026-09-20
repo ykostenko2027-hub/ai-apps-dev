@@ -1,0 +1,5 @@
+{
+  "model_name": "intfloat/multilingual-e5-small",
+  "num_chunks": 127,
+  "dim": 384
+}
