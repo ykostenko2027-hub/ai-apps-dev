@@ -1,0 +1,1048 @@
+{
+ "meta": {
+  "created": "2026-11-05T20:26:44",
+  "label": "calibration",
+  "target": "drafts",
+  "config": {
+   "provider": "openai",
+   "fallback": "mock",
+   "timeout": 20.0,
+   "idle_timeout": 8.0,
+   "total_timeout": 45.0,
+   "max_attempts": 3,
+   "max_concurrent": 2,
+   "model": "gemini-3.1-flash-lite",
+   "prompt_version": "drafts-v1",
+   "temperature": null,
+   "max_tokens": null,
+   "app_dir": "C:\\Users\\kosty\\Downloads\\ПР11 Матеріали\\pr11",
+   "use_cache": false
+  },
+  "cases_file": "eval\\cases\\drafts.json",
+  "cases_sha256": "abac9d0b7ce13dd0",
+  "k": 1,
+  "judge": true,
+  "filters": {
+   "ids": "d01,d04,d05,d07,e01,e02,e03,e04,e05,e06,d02,d06",
+   "kinds": null
+  },
+  "python": "3.14.0",
+  "duration_s": 70.3,
+  "partial": false
+ },
+ "cases": [
+  {
+   "id": "d01",
+   "kind": "normal",
+   "about": "повернення оформлено — усі факти мають потрапити в чернетку"
+  },
+  {
+   "id": "d04",
+   "kind": "normal",
+   "about": "повернення за дефектом — номер заявки, як відправити, що накладна прийде окремо"
+  },
+  {
+   "id": "d05",
+   "kind": "normal",
+   "about": "скасування виконано — платити нічого не треба, курʼєр не приїде"
+  },
+  {
+   "id": "d07",
+   "kind": "normal",
+   "about": "стан замовлення — номер, накладна, строк як діапазон; без вигаданої точної дати"
+  },
+  {
+   "id": "e01",
+   "kind": "edge",
+   "about": "фактів немає зовсім — чернетка не має вигадувати; відмова на вході також прийнятна"
+  },
+  {
+   "id": "e02",
+   "kind": "edge",
+   "about": "факти є, але не про те, про що питає клієнт"
+  },
+  {
+   "id": "e03",
+   "kind": "edge",
+   "about": "дуже довге й плутане звернення — питання посередині; чернетка коротка й по суті"
+  },
+  {
+   "id": "e04",
+   "kind": "edge",
+   "about": "два питання в одному зверненні — обидва мають бути відпрацьовані"
+  },
+  {
+   "id": "e05",
+   "kind": "edge",
+   "about": "межа строку: сьогодні — останній день повернення"
+  },
+  {
+   "id": "e06",
+   "kind": "edge",
+   "about": "клієнт пише іншою мовою, з HTML і емодзі — чернетка українською, без тегів"
+  },
+  {
+   "id": "d02",
+   "kind": "negative",
+   "about": "відмова за правилами: витратні матеріали — без винятків і альтернатив"
+  },
+  {
+   "id": "d06",
+   "kind": "negative",
+   "about": "скасувати не можна — чому, і що можна зробити натомість (лише з фактів)"
+  }
+ ],
+ "results": [
+  {
+   "id": "d01",
+   "kind": "normal",
+   "attempt": 1,
+   "output": {
+    "text": "Доброго дня! Дякуємо за звернення до інтернет-магазину «Сузірʼя».\n\nЯ допоможу вам із питанням повернення робота-пилососа «Сіріус R10» із замовлення №10412. Оскільки ви отримали товар 29 вересня, ви вкладаєтеся у встановлений законом термін (14 днів), тому ми можемо прийняти його на повернення.\n\nВаша заявка №R-5001 вже оформлена. Для завершення процедури, будь ласка, привезіть товар на наш склад за адресою: **м. Кременчук, вул. Промислова, 7**.\n\nЗверніть увагу на наступні умови:\n1. Товар має бути у повній комплектації.\n2. При собі обов'язково потрібно мати документ про оплату.\n\nПісля того, як ми отримаємо товар та проведемо його перевірку, кошти будуть повернуті на вашу картку протягом 7 робочих днів.\n\nЧи є у вас ще запитання щодо процесу повернення?",
+    "status": "ok",
+    "error": null,
+    "calls": [],
+    "provider": "openai",
+    "model": "gemini-3.1-flash-lite",
+    "usage": {
+     "completion_tokens": 241,
+     "prompt_tokens": 291,
+     "total_tokens": 532
+    },
+    "cost": 0.00069,
+    "cost_estimated": false,
+    "cached": false,
+    "fallback": false,
+    "attempts": null,
+    "warnings": [],
+    "elapsed": 2.884
+   },
+   "checks": [
+    {
+     "name": "contains_all",
+     "passed": true,
+     "detail": "",
+     "data": null
+    },
+    {
+     "name": "contains_any",
+     "passed": false,
+     "detail": "немає жодного з: «13.10», «13 жовтня»",
+     "data": null
+    },
+    {
+     "name": "contains_any",
+     "passed": true,
+     "detail": "є «7 робочих»",
+     "data": null
+    },
+    {
+     "name": "not_contains",
+     "passed": true,
+     "detail": "",
+     "data": null
+    },
+    {
+     "name": "language",
+     "passed": true,
+     "detail": "мова uk (99.7% кирилиці)",
+     "data": null
+    },
+    {
+     "name": "max_words",
+     "passed": true,
+     "detail": "117 слів",
+     "data": null
+    },
+    {
+     "name": "numbers_from_facts",
+     "passed": false,
+     "detail": "числа не з фактів: 2",
+     "data": null
+    },
+    {
+     "name": "judge",
+     "passed": true,
+     "detail": "tone, next_step",
+     "data": {
+      "criteria": [
+       {
+        "id": "tone",
+        "passed": true,
+        "reason": "Текст ввічливий, професійний, без зайвих вибачень та канцеляриту."
+       },
+       {
+        "id": "next_step",
+        "passed": true,
+        "reason": "Клієнту чітко розписано подальші кроки: куди привезти товар, що мати з собою та коли очікувати повернення коштів."
+       }
+      ],
+      "overall": true,
+      "model": "gemini-3.5-flash-lite",
+      "usage": {
+       "prompt_tokens": 746,
+       "completion_tokens": 135,
+       "total_tokens": 881
+      }
+     }
+    }
+   ],
+   "passed": false
+  },
+  {
+   "id": "d04",
+   "kind": "normal",
+   "attempt": 1,
+   "output": {
+    "text": "Вітаю! Дякую за звернення до інтернет-магазину «Сузірʼя».\n\nМені дуже прикро, що ви зіткнулися з такою проблемою з навушниками «Оріон X2» (замовлення №10421). Оскільки гарантія на ваш товар ще діє, ми обов'язково допоможемо вирішити це питання.\n\nВашу заявку на повернення за дефектом №R-5002 вже оформлено. Для подальших дій, будь ласка, надішліть навушники «Новою поштою» на відділення №12 у місті Києві. Доставка здійснюється за рахунок нашого магазину. Номер експрес-накладної для відправлення надійде вам окремим повідомленням протягом сьогоднішнього дня.\n\nПісля того, як навушники надійдуть до нас, вони будуть передані до сервісного центру для перевірки (це займає до 14 днів). Після завершення діагностики ми зможемо замінити товар на новий або повернути вам кошти — ви зможете обрати зручний для вас варіант.\n\nЯкщо у вас виникнуть додаткові запитання, я з радістю на них відповім.",
+    "status": "ok",
+    "error": null,
+    "calls": [],
+    "provider": "openai",
+    "model": "gemini-3.1-flash-lite",
+    "usage": {
+     "completion_tokens": 290,
+     "prompt_tokens": 282,
+     "total_tokens": 572
+    },
+    "cost": 0.00081,
+    "cost_estimated": false,
+    "cached": false,
+    "fallback": false,
+    "attempts": null,
+    "warnings": [],
+    "elapsed": 1.206
+   },
+   "checks": [
+    {
+     "name": "contains_all",
+     "passed": true,
+     "detail": "",
+     "data": null
+    },
+    {
+     "name": "contains_any",
+     "passed": true,
+     "detail": "є «накладн»",
+     "data": null
+    },
+    {
+     "name": "contains_any",
+     "passed": true,
+     "detail": "є «14 дн»",
+     "data": null
+    },
+    {
+     "name": "language",
+     "passed": true,
+     "detail": "мова uk (99.7% кирилиці)",
+     "data": null
+    },
+    {
+     "name": "max_words",
+     "passed": false,
+     "detail": "132 слів, межа 130",
+     "data": null
+    },
+    {
+     "name": "numbers_from_facts",
+     "passed": true,
+     "detail": "10421, 12, 14, 2, 5002",
+     "data": null
+    },
+    {
+     "name": "judge",
+     "passed": true,
+     "detail": "tone, next_step, grounded",
+     "data": {
+      "criteria": [
+       {
+        "id": "tone",
+        "passed": true,
+        "reason": "Текст ввічливий, професійний, без зайвого канцеляриту чи повчань."
+       },
+       {
+        "id": "next_step",
+        "passed": true,
+        "reason": "Клієнту чітко розписано подальші дії: куди надіслати, за чий рахунок, як отримати накладну та скільки триватиме перевірка."
+       },
+       {
+        "id": "grounded",
+        "passed": true,
+        "reason": "Усі деталі замовлення, номер заявки, умови доставки та строки перевірки повністю відповідають наданим фактам без жодних вигадок."
+       }
+      ],
+      "overall": true,
+      "model": "gemini-3.5-flash-lite",
+      "usage": {
+       "prompt_tokens": 836,
+       "completion_tokens": 205,
+       "total_tokens": 1041
+      }
+     }
+    }
+   ],
+   "passed": false
+  },
+  {
+   "id": "d05",
+   "kind": "normal",
+   "attempt": 1,
+   "output": {
+    "text": "Вітаю! Дякую за звернення до інтернет-магазину «Сузірʼя».\n\nПовідомляю вам, що ваше замовлення №10463 (чохол для «Оріон X2» та два кабелі USB-C) вже було успішно скасовано 06.10.2026. Кур'єрську доставку, яка була запланована на 07.10.2026, також скасовано.\n\nОскільки оплата мала відбутися при отриманні, повернення коштів не потребується.\n\nЯкщо у вас виникнуть інші запитання, звертайтеся, будемо раді допомогти!",
+    "status": "ok",
+    "error": null,
+    "calls": [],
+    "provider": "openai",
+    "model": "gemini-3.1-flash-lite",
+    "usage": {
+     "completion_tokens": 151,
+     "prompt_tokens": 189,
+     "total_tokens": 340
+    },
+    "cost": 0.000434,
+    "cost_estimated": false,
+    "cached": false,
+    "fallback": false,
+    "attempts": null,
+    "warnings": [],
+    "elapsed": 1.338
+   },
+   "checks": [
+    {
+     "name": "contains_all",
+     "passed": true,
+     "detail": "",
+     "data": null
+    },
+    {
+     "name": "contains_any",
+     "passed": true,
+     "detail": "є «скасован»",
+     "data": null
+    },
+    {
+     "name": "contains_any",
+     "passed": true,
+     "detail": "є «курʼєр»",
+     "data": null
+    },
+    {
+     "name": "language",
+     "passed": true,
+     "detail": "мова uk (98.4% кирилиці)",
+     "data": null
+    },
+    {
+     "name": "max_words",
+     "passed": true,
+     "detail": "62 слів",
+     "data": null
+    },
+    {
+     "name": "numbers_from_facts",
+     "passed": true,
+     "detail": "10, 10463, 2, 2026, 6, 7",
+     "data": null
+    }
+   ],
+   "passed": true
+  },
+  {
+   "id": "d07",
+   "kind": "normal",
+   "attempt": 1,
+   "output": {
+    "text": "Вітаю! Дякую за ваше звернення до інтернет-магазину «Сузірʼя».\n\nВаше замовлення № 10458 зі смарт-годинником «Вега S» було передано службі «Нова пошта» 04.10.2026. Ви можете відстежити посилку за номером експрес-накладної: **20450012345678**.\n\nПосилка прямує до відділення № 12 у місті Києві. Орієнтовний термін доставки складає 1–3 робочі дні. Будь ласка, очікуйте SMS-повідомлення від «Нової пошти» про прибуття вашого замовлення у відділення.\n\nЯкщо у вас виникнуть додаткові запитання, я з радістю допоможу!",
+    "status": "ok",
+    "error": null,
+    "calls": [],
+    "provider": "openai",
+    "model": "gemini-3.1-flash-lite",
+    "usage": {
+     "completion_tokens": 199,
+     "prompt_tokens": 204,
+     "total_tokens": 403
+    },
+    "cost": 0.000559,
+    "cost_estimated": false,
+    "cached": false,
+    "fallback": false,
+    "attempts": null,
+    "warnings": [],
+    "elapsed": 1.723
+   },
+   "checks": [
+    {
+     "name": "contains_all",
+     "passed": true,
+     "detail": "",
+     "data": null
+    },
+    {
+     "name": "contains_any",
+     "passed": true,
+     "detail": "є «1–3»",
+     "data": null
+    },
+    {
+     "name": "regex",
+     "passed": true,
+     "detail": "",
+     "data": null
+    },
+    {
+     "name": "language",
+     "passed": true,
+     "detail": "мова uk (98.9% кирилиці)",
+     "data": null
+    },
+    {
+     "name": "numbers_from_facts",
+     "passed": true,
+     "detail": "1, 10, 10458, 12, 2026, 20450012345678, 3, 4",
+     "data": null
+    },
+    {
+     "name": "judge",
+     "passed": true,
+     "detail": "grounded",
+     "data": {
+      "criteria": [
+       {
+        "id": "grounded",
+        "passed": true,
+        "reason": "Усі твердження у відповіді повністю відповідають встановленим фактам: номер замовлення, товар, дата передачі Новій пошті, номер накладної, місто, номер відділення, строк доставки та інформація про SMS повністю збігаються з наданими фактами без жодних вигадок."
+       }
+      ],
+      "overall": true,
+      "model": "gemini-3.5-flash-lite",
+      "usage": {
+       "prompt_tokens": 562,
+       "completion_tokens": 115,
+       "total_tokens": 677
+      }
+     }
+    }
+   ],
+   "passed": true
+  },
+  {
+   "id": "e01",
+   "kind": "edge",
+   "attempt": 1,
+   "output": {
+    "text": "Вітаю! Дякую за ваше звернення до інтернет-магазину «Сузірʼя».\n\nНа жаль, у мене наразі немає інформації про ваше замовлення. Будь ласка, повідомте номер вашого замовлення, щоб я міг перевірити його статус та надати вам актуальну інформацію.",
+    "status": "ok",
+    "error": null,
+    "calls": [],
+    "provider": "openai",
+    "model": "gemini-3.1-flash-lite",
+    "usage": {
+     "completion_tokens": 74,
+     "prompt_tokens": 79,
+     "total_tokens": 153
+    },
+    "cost": 0.000209,
+    "cost_estimated": false,
+    "cached": false,
+    "fallback": false,
+    "attempts": null,
+    "warnings": [],
+    "elapsed": 1.544
+   },
+   "checks": [
+    {
+     "name": "status",
+     "passed": true,
+     "detail": "status=ok",
+     "data": null
+    },
+    {
+     "name": "numbers_from_facts",
+     "passed": true,
+     "detail": "без чисел",
+     "data": null
+    },
+    {
+     "name": "regex",
+     "passed": true,
+     "detail": "",
+     "data": null
+    },
+    {
+     "name": "max_words",
+     "passed": true,
+     "detail": "36 слів",
+     "data": null
+    },
+    {
+     "name": "judge",
+     "passed": true,
+     "detail": "asks_clarification",
+     "data": {
+      "criteria": [
+       {
+        "id": "asks_clarification",
+        "passed": true,
+        "reason": "Факти відсутні, і текст чесно говорить про брак інформації та просить у клієнта номер замовлення для уточнення, не вигадуючи подробиць."
+       }
+      ],
+      "overall": true,
+      "model": "gemini-3.5-flash-lite",
+      "usage": {
+       "prompt_tokens": 315,
+       "completion_tokens": 88,
+       "total_tokens": 403
+      }
+     }
+    }
+   ],
+   "passed": true
+  },
+  {
+   "id": "e02",
+   "kind": "edge",
+   "attempt": 1,
+   "output": {
+    "text": "Вітаю! Дякую за ваше звернення до інтернет-магазину «Сузірʼя».\n\nНа жаль, у мене немає інформації щодо графіку роботи кур'єрської доставки у місті Кременчук та можливості здійснення доставки у суботу. Надані мені дані стосуються лише оформлення повернення товару.\n\nЧи можу я допомогти вам з чимось іншим, що стосується вашого замовлення №10412?",
+    "status": "ok",
+    "error": null,
+    "calls": [],
+    "provider": "openai",
+    "model": "gemini-3.1-flash-lite",
+    "usage": {
+     "completion_tokens": 106,
+     "prompt_tokens": 168,
+     "total_tokens": 274
+    },
+    "cost": 0.000315,
+    "cost_estimated": false,
+    "cached": false,
+    "fallback": false,
+    "attempts": null,
+    "warnings": [],
+    "elapsed": 0.95
+   },
+   "checks": [
+    {
+     "name": "not_contains",
+     "passed": true,
+     "detail": "",
+     "data": null
+    },
+    {
+     "name": "numbers_from_facts",
+     "passed": true,
+     "detail": "10412",
+     "data": null
+    },
+    {
+     "name": "judge",
+     "passed": true,
+     "detail": "addresses_question, asks_clarification",
+     "data": {
+      "criteria": [
+       {
+        "id": "addresses_question",
+        "passed": true,
+        "reason": "Відповідь чітко стосується запитання клієнта про доставку кур'єром у Кременчуці на суботу."
+       },
+       {
+        "id": "asks_clarification",
+        "passed": true,
+        "reason": "Оператор чесно повідомив про брак фактів щодо доставки та не вигадував подробиць, спираючись лише на наявні дані."
+       }
+      ],
+      "overall": true,
+      "model": "gemini-3.5-flash-lite",
+      "usage": {
+       "prompt_tokens": 467,
+       "completion_tokens": 144,
+       "total_tokens": 611
+      }
+     }
+    }
+   ],
+   "passed": true
+  },
+  {
+   "id": "e03",
+   "kind": "edge",
+   "attempt": 1,
+   "output": {
+    "text": "Доброго дня, пані Олено! Дякуємо, що звернулися до нас, і перепрошуємо за хвилювання, яке виникли через очікування.\n\nПерш за все, хочу подякувати за ваш відгук про попередню швидку доставку — нам дуже приємно це чути.\n\nЩодо вашого замовлення №10458: повідомляю, що 04.10.2026 ми передали годинник «Вега S» до служби доставки «Нова пошта». Ваша експрес-накладна: **20450012345678**.\n\nПосилка прямує до відділення №12 у місті Києві. Орієнтовний термін доставки складає 1–3 робочі дні. Як тільки годинник прибуде до відділення, «Нова пошта» надішле вам відповідне SMS-повідомлення. Враховуючи ці терміни, ми робимо все можливе, щоб подарунок встиг прибути до 10 жовтня.\n\nСтосовно вашого запитання про ремінці іншого кольору: на жаль, у мене наразі немає інформації про наявність додаткових аксесуарів у нашому асортименті. Будь ласка, зверніться до нас із цим питанням пізніше, або перевірте оновлення на нашому сайті.\n\nЯкщо у вас виникнуть додаткові запитання, ми завжди готові допомогти. Бажаємо гарного свята вашому чоловікові!\n\nЗ повагою, служба підтримки інтернет-магазину «Сузірʼя».",
+    "status": "ok",
+    "error": null,
+    "calls": [],
+    "provider": "openai",
+    "model": "gemini-3.1-flash-lite",
+    "usage": {
+     "completion_tokens": 383,
+     "prompt_tokens": 424,
+     "total_tokens": 807
+    },
+    "cost": 0.001085,
+    "cost_estimated": false,
+    "cached": false,
+    "fallback": false,
+    "attempts": null,
+    "warnings": [],
+    "elapsed": 14.258
+   },
+   "checks": [
+    {
+     "name": "contains_all",
+     "passed": true,
+     "detail": "",
+     "data": null
+    },
+    {
+     "name": "not_contains",
+     "passed": true,
+     "detail": "",
+     "data": null
+    },
+    {
+     "name": "max_words",
+     "passed": false,
+     "detail": "158 слів, межа 130",
+     "data": null
+    },
+    {
+     "name": "language",
+     "passed": true,
+     "detail": "мова uk (99.5% кирилиці)",
+     "data": null
+    },
+    {
+     "name": "numbers_from_facts",
+     "passed": true,
+     "detail": "1, 10, 10458, 12, 2026, 20450012345678, 3, 4",
+     "data": null
+    }
+   ],
+   "passed": false
+  },
+  {
+   "id": "e04",
+   "kind": "edge",
+   "attempt": 1,
+   "output": {
+    "text": "Вітаю! Дякую за звернення до інтернет-магазину «Сузірʼя».\n\nЩодо вашого запитання про повернення:\n\n1. Робот-пилосос «Сіріус R10» (заявка №R-5001) необхідно привезти на наш склад за адресою: **вул. Промислова, 7**. Будь ласка, зверніть увагу, що товар має бути у повній комплектації, а доставити його потрібно до **13.10.2026**.\n\n2. Стосовно фільтрів: на жаль, ми не зможемо прийняти їх назад. Згідно з нашими правилами, фільтри належать до витратних матеріалів, а витратні матеріали належної якості поверненню не підлягають.\n\nЯкщо у вас виникнуть додаткові запитання, я з радістю допоможу!",
+    "status": "ok",
+    "error": null,
+    "calls": [],
+    "provider": "openai",
+    "model": "gemini-3.1-flash-lite",
+    "usage": {
+     "completion_tokens": 207,
+     "prompt_tokens": 227,
+     "total_tokens": 434
+    },
+    "cost": 0.000586,
+    "cost_estimated": false,
+    "cached": false,
+    "fallback": false,
+    "attempts": null,
+    "warnings": [],
+    "elapsed": 4.617
+   },
+   "checks": [
+    {
+     "name": "contains_all",
+     "passed": true,
+     "detail": "",
+     "data": null
+    },
+    {
+     "name": "contains_any",
+     "passed": true,
+     "detail": "є «витратн»",
+     "data": null
+    },
+    {
+     "name": "not_contains",
+     "passed": true,
+     "detail": "",
+     "data": null
+    },
+    {
+     "name": "numbers_from_facts",
+     "passed": false,
+     "detail": "числа не з фактів: 1",
+     "data": null
+    },
+    {
+     "name": "judge",
+     "passed": true,
+     "detail": "addresses_question, refuses_properly",
+     "data": {
+      "criteria": [
+       {
+        "id": "addresses_question",
+        "passed": true,
+        "reason": "Відповідь чітко стосується обох запитань клієнта: адреси складу для повернення пилососа та можливості повернути фільтри."
+       },
+       {
+        "id": "refuses_properly",
+        "passed": true,
+        "reason": "Відмова щодо фільтрів обґрунтована фактами (вони є витратними матеріалами і не підлягають поверненню), без вигаданих альтернатив, звинувачень чи фрази «як виняток»."
+       }
+      ],
+      "overall": true,
+      "model": "gemini-3.5-flash-lite",
+      "usage": {
+       "prompt_tokens": 623,
+       "completion_tokens": 167,
+       "total_tokens": 790
+      }
+     }
+    }
+   ],
+   "passed": false
+  },
+  {
+   "id": "e05",
+   "kind": "edge",
+   "attempt": 1,
+   "output": {
+    "text": "Вітаю! Дякую за звернення до інтернет-магазину «Сузірʼя».\n\nЯ перевірив інформацію щодо вашого замовлення № 10399. Оскільки сьогодні, 06.10.2026, є останнім днем 14-денного терміну, протягом якого можна повернути товар належної якості, ви встигаєте оформити повернення.\n\nДля завершення процедури вам необхідно звернутися до відділення «Нової пошти» № 31 у Львові до кінця сьогоднішнього робочого дня. Заявка на повернення під номером **R-5004** вже попередньо створена, тому ви можете назвати її оператору у відділенні.\n\nБудь ласка, переконайтеся, що товар має належний вигляд та повну комплектацію. Якщо у вас виникнуть додаткові запитання, я з радістю допоможу!",
+    "status": "ok",
+    "error": null,
+    "calls": [],
+    "provider": "openai",
+    "model": "gemini-3.1-flash-lite",
+    "usage": {
+     "completion_tokens": 211,
+     "prompt_tokens": 241,
+     "total_tokens": 452
+    },
+    "cost": 0.0006,
+    "cost_estimated": false,
+    "cached": false,
+    "fallback": false,
+    "attempts": null,
+    "warnings": [],
+    "elapsed": 1.384
+   },
+   "checks": [
+    {
+     "name": "contains_all",
+     "passed": true,
+     "detail": "",
+     "data": null
+    },
+    {
+     "name": "contains_any",
+     "passed": true,
+     "detail": "є «сьогодні»",
+     "data": null
+    },
+    {
+     "name": "not_contains",
+     "passed": true,
+     "detail": "",
+     "data": null
+    },
+    {
+     "name": "numbers_from_facts",
+     "passed": true,
+     "detail": "10, 10399, 14, 2026, 31, 5004, 6",
+     "data": null
+    },
+    {
+     "name": "judge",
+     "passed": true,
+     "detail": "next_step, grounded",
+     "data": {
+      "criteria": [
+       {
+        "id": "next_step",
+        "passed": true,
+        "reason": "Клієнту чітко пояснено, куди звернутися (відділення Нової пошти № 31 у Львові), в які строки (до кінця сьогоднішнього робочого дня) та що назвати оператору (номер заявки R-5004)."
+       },
+       {
+        "id": "grounded",
+        "passed": true,
+        "reason": "Усі твердження про замовлення, строки, номер заявки та адресу відділення повністю відповідають наданим фактам без жодних вигадок чи перекручень."
+       }
+      ],
+      "overall": true,
+      "model": "gemini-3.5-flash-lite",
+      "usage": {
+       "prompt_tokens": 657,
+       "completion_tokens": 175,
+       "total_tokens": 832
+      }
+     }
+    }
+   ],
+   "passed": true
+  },
+  {
+   "id": "e06",
+   "kind": "edge",
+   "attempt": 1,
+   "output": {
+    "text": "Вітаю! Дякую за ваше звернення до інтернет-магазину «Сузірʼя».\n\nМені дуже прикро, що ви хвилюєтеся через затримку. Я перевірив інформацію щодо вашого замовлення № 10458 (смарт-годинник «Вега S»).\n\nПовідомляю, що 04.10.2026 ваше замовлення було передано службі «Нова пошта». Ви можете відстежити посилку за номером експрес-накладної: **20450012345678**.\n\nПосилка прямує до відділення № 12 у місті Києві. Орієнтовний строк доставки становить 1–3 робочі дні.\n\nЯкщо у вас виникнуть додаткові запитання, будь ласка, звертайтеся. Перепрошуємо за можливі незручності!",
+    "status": "ok",
+    "error": null,
+    "calls": [],
+    "provider": "openai",
+    "model": "gemini-3.1-flash-lite",
+    "usage": {
+     "completion_tokens": 214,
+     "prompt_tokens": 216,
+     "total_tokens": 430
+    },
+    "cost": 0.0006,
+    "cost_estimated": false,
+    "cached": false,
+    "fallback": false,
+    "attempts": null,
+    "warnings": [],
+    "elapsed": 1.382
+   },
+   "checks": [
+    {
+     "name": "contains_all",
+     "passed": true,
+     "detail": "",
+     "data": null
+    },
+    {
+     "name": "regex",
+     "passed": true,
+     "detail": "",
+     "data": null
+    },
+    {
+     "name": "language",
+     "passed": true,
+     "detail": "мова uk (99.8% кирилиці)",
+     "data": null
+    },
+    {
+     "name": "numbers_from_facts",
+     "passed": true,
+     "detail": "1, 10, 10458, 12, 2026, 20450012345678, 3, 4",
+     "data": null
+    }
+   ],
+   "passed": true
+  },
+  {
+   "id": "d02",
+   "kind": "negative",
+   "attempt": 1,
+   "output": {
+    "text": "Вітаю! Дякую за звернення до інтернет-магазину «Сузірʼя».\n\nМені дуже прикро, що фільтри з вашого замовлення №10412 вам не знадобилися. Однак, згідно з нашими правилами, фільтри належать до категорії витратних матеріалів, а витратні матеріали належної якості поверненню не підлягають.\n\nТакож хочу уточнити, що заявка на повернення пилососа (R-5001) не поширюється на ці фільтри. Тому, на жаль, ми не зможемо прийняти їх назад.\n\nДякую за розуміння. Якщо у вас виникнуть інші запитання, я з радістю допоможу!",
+    "status": "ok",
+    "error": null,
+    "calls": [],
+    "provider": "openai",
+    "model": "gemini-3.1-flash-lite",
+    "usage": {
+     "completion_tokens": 169,
+     "prompt_tokens": 202,
+     "total_tokens": 371
+    },
+    "cost": 0.000483,
+    "cost_estimated": false,
+    "cached": false,
+    "fallback": false,
+    "attempts": null,
+    "warnings": [],
+    "elapsed": 1.316
+   },
+   "checks": [
+    {
+     "name": "contains_any",
+     "passed": true,
+     "detail": "є «витратн»",
+     "data": null
+    },
+    {
+     "name": "not_contains",
+     "passed": true,
+     "detail": "",
+     "data": null
+    },
+    {
+     "name": "language",
+     "passed": true,
+     "detail": "мова uk (99.7% кирилиці)",
+     "data": null
+    },
+    {
+     "name": "numbers_from_facts",
+     "passed": true,
+     "detail": "10412, 5001",
+     "data": null
+    },
+    {
+     "name": "judge",
+     "passed": true,
+     "detail": "refuses_properly, no_extra_promises",
+     "data": {
+      "criteria": [
+       {
+        "id": "refuses_properly",
+        "passed": true,
+        "reason": "Відмову аргументовано на основі фактів про витратні матеріали, без вигаданих альтернатив чи звинувачень."
+       },
+       {
+        "id": "no_extra_promises",
+        "passed": true,
+        "reason": "Немає жодних обіцянок, компенсацій, знижок чи винятків, не передбачених фактами."
+       }
+      ],
+      "overall": true,
+      "model": "gemini-3.5-flash-lite",
+      "usage": {
+       "prompt_tokens": 566,
+       "completion_tokens": 136,
+       "total_tokens": 702
+      }
+     }
+    }
+   ],
+   "passed": true
+  },
+  {
+   "id": "d06",
+   "kind": "negative",
+   "attempt": 1,
+   "output": {
+    "text": "Вітаю! Дякую за звернення до інтернет-магазину «Сузірʼя».\n\nНа жаль, я не можу скасувати ваше замовлення №10458, оскільки воно вже було передано перевізнику «Нова пошта» 04.10.2026 (експрес-накладна №20450012345678).\n\nВи можете відмовитися від отримання посилки безпосередньо у відділенні «Нової пошти». Після того, як посилка повернеться до нашого магазину, ми опрацюємо повернення коштів на вашу картку протягом 7 робочих днів.\n\nЧи можу я допомогти вам чимось ще?",
+    "status": "ok",
+    "error": null,
+    "calls": [],
+    "provider": "openai",
+    "model": "gemini-3.1-flash-lite",
+    "usage": {
+     "completion_tokens": 172,
+     "prompt_tokens": 223,
+     "total_tokens": 395
+    },
+    "cost": 0.000497,
+    "cost_estimated": false,
+    "cached": false,
+    "fallback": false,
+    "attempts": null,
+    "warnings": [],
+    "elapsed": 1.152
+   },
+   "checks": [
+    {
+     "name": "contains_all",
+     "passed": true,
+     "detail": "",
+     "data": null
+    },
+    {
+     "name": "contains_any",
+     "passed": true,
+     "detail": "є «відмовитися»",
+     "data": null
+    },
+    {
+     "name": "contains_any",
+     "passed": true,
+     "detail": "є «7 робочих»",
+     "data": null
+    },
+    {
+     "name": "not_contains",
+     "passed": true,
+     "detail": "",
+     "data": null
+    },
+    {
+     "name": "numbers_from_facts",
+     "passed": true,
+     "detail": "10, 10458, 2026, 20450012345678, 4, 7",
+     "data": null
+    },
+    {
+     "name": "judge",
+     "passed": true,
+     "detail": "refuses_properly, next_step",
+     "data": {
+      "criteria": [
+       {
+        "id": "refuses_properly",
+        "passed": true,
+        "reason": "Відмову аргументовано на основі фактів про передачу замовлення перевізнику, без зайвих вигадок чи винятків."
+       },
+       {
+        "id": "next_step",
+        "passed": true,
+        "reason": "Чітко пояснено подальші дії клієнта (відмовитися у відділенні) та терміни повернення коштів."
+       }
+      ],
+      "overall": true,
+      "model": "gemini-3.5-flash-lite",
+      "usage": {
+       "prompt_tokens": 595,
+       "completion_tokens": 141,
+       "total_tokens": 736
+      }
+     }
+    }
+   ],
+   "passed": true
+  }
+ ],
+ "summary": {
+  "normal": {
+   "cases": 4,
+   "pass_all": 2,
+   "pass_any": 2,
+   "flaky": 0,
+   "attempts": 4,
+   "attempts_passed": 2,
+   "errors": 0,
+   "tokens_avg": 462,
+   "cost_total": 0.002493,
+   "elapsed_p50": 1.723
+  },
+  "edge": {
+   "cases": 6,
+   "pass_all": 4,
+   "pass_any": 4,
+   "flaky": 0,
+   "attempts": 6,
+   "attempts_passed": 4,
+   "errors": 0,
+   "tokens_avg": 425,
+   "cost_total": 0.003395,
+   "elapsed_p50": 1.384
+  },
+  "negative": {
+   "cases": 2,
+   "pass_all": 2,
+   "pass_any": 2,
+   "flaky": 0,
+   "attempts": 2,
+   "attempts_passed": 2,
+   "errors": 0,
+   "tokens_avg": 383,
+   "cost_total": 0.00098,
+   "elapsed_p50": 1.152
+  },
+  "разом": {
+   "cases": 12,
+   "pass_all": 8,
+   "pass_any": 8,
+   "flaky": 0,
+   "attempts": 12,
+   "attempts_passed": 8,
+   "errors": 0,
+   "tokens_avg": 430,
+   "cost_total": 0.006868,
+   "elapsed_p50": 1.384
+  }
+ }
+}
